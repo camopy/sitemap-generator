@@ -58,7 +58,7 @@ func (c *Crawler) Start() (map[string]string, error) {
 					continue
 				}
 				<-c.workerCh
-				go c.craw(url, anchors.depth)
+				go c.crawl(url, anchors.depth)
 			}
 		case err := <-c.errCh:
 			return nil, err
@@ -73,7 +73,7 @@ func (c *Crawler) waitWorkersAndCloseQueue() {
 	c.doneCh <- true
 }
 
-func (c *Crawler) craw(url string, depth int) {
+func (c *Crawler) crawl(url string, depth int) {
 	defer func() { c.workerCh <- true }()
 	defer c.wg.Done()
 
